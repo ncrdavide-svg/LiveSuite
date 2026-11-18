@@ -103,6 +103,8 @@
         <!-- Footer -->
         <DockPanel Margin="2,4,2,0">
             <Button DockPanel.Dock="Right" Style="{StaticResource LinkBtn}" Content="LiveSuite su GitHub" Click="SelfRepo_Click"/>
+            <TextBlock DockPanel.Dock="Right" Text="  ·  " Foreground="{StaticResource Dim}" FontSize="13"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource LinkBtn}" Content="☕ Offrimi un caffè" Click="Coffee_Click"/>
             <TextBlock x:Name="FooterText" Foreground="{StaticResource Dim}" FontSize="12.5"/>
         </DockPanel>
     </StackPanel>

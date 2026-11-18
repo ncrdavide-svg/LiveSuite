@@ -15,8 +15,15 @@ namespace LiveSuite
         {
             InitializeComponent();
             AppList.ItemsSource = _items;
-            FooterText.Text = $"LiveSuite {Versions.Short(Versions.Current)} · le installazioni si scaricano da GitHub, dalla pagina «Releases» di ogni app.";
-            Loaded += async (_, __) => await RefreshAllAsync();
+            FooterText.Text = $"LiveSuite {Versions.Short(Versions.Current)} · le installazioni arrivano dalle Releases su GitHub";
+            Loaded += async (_, __) =>
+            {
+                // GitHub is checked while the support window is up, so the cards are ready when it closes.
+                var refresh = RefreshAllAsync();
+                // Modal on purpose, as in the other apps: a non-modal one ended up hidden behind this window.
+                new SupportWindow { Owner = this }.ShowDialog();
+                await refresh;
+            };
             // Coming back to the window (e.g. after closing an app or an installer) re-reads what's installed.
             Activated += async (_, __) =>
             {
@@ -84,6 +91,8 @@ namespace LiveSuite
         }
 
         void SelfRepo_Click(object sender, RoutedEventArgs e) => OpenUrl($"https://github.com/{Suite.SelfRepo}");
+
+        void Coffee_Click(object sender, RoutedEventArgs e) => OpenUrl(SupportWindow.SupportUrl);
 
         async void SelfUpdate_Click(object sender, RoutedEventArgs e)
         {

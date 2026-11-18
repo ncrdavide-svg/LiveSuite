@@ -19,6 +19,7 @@ gh release create vX.Y.Z artifacts\LiveSuite.exe --title "LiveSuite X.Y.Z" --not
 - `GitHub.cs`: API pubblica `releases/latest` (limite 60 richieste/ora per IP) + download con progresso. Se l'API non risponde, il download usa `releases/latest/download/<App>-Setup.exe`, quindi **ogni Release delle app deve avere l'asset col nome fisso `<App>-Setup.exe`**.
 - `Installed.cs`: versione installata da `HKCU/HKLM\...\Uninstall\{AppId}_is1` (`DisplayVersion`, `InstallLocation`), viste 64 e 32 bit. Se l'exe non c'è più, l'app conta come non installata.
 - `SelfUpdate.cs`: se la Release di LiveSuite ha `LiveSuite.exe` più nuovo, rinomina l'exe in esecuzione in `.old`, copia il nuovo, riavvia; `.old` si cancella all'avvio successivo. Se la cartella non è scrivibile apre la pagina della Release.
+- `SupportWindow`: finestra Buy Me a Coffee (QR + buymeacoffee.com/cin8, "No, grazie" dopo 3 s) a ogni avvio, modale, identica a quella di LiveCue, LiveSlides e LiveCount; nel piè di pagina anche il link «Offrimi un caffè».
 
 ## Convenzioni (come le altre app)
 

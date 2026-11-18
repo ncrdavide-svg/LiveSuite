@@ -50,3 +50,7 @@ gh release create v1.0.1 artifacts\LiveSuite.exe --title "LiveSuite 1.0.1" --not
 ```
 
 L'asset si deve chiamare esattamente `LiveSuite.exe`: è quello che cercano il link di download e l'aggiornamento automatico.
+
+## Supporta
+
+Se la suite ti è utile, offrimi un caffè: [buymeacoffee.com/cin8](https://buymeacoffee.com/cin8)
