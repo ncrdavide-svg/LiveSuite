@@ -107,22 +107,16 @@ def save(img, path, w, h):
 
 
 def home_banner():
-    """1600x400 with icons, title and subtitle. Content kept in the central band: Google Sites
-    crops the header image differently on phones."""
+    """1600x400 with title and subtitles. Nothing in the top fifth: Google Sites draws its
+    navigation bar over it. Content kept in the central band, since phones crop the sides."""
     W, H = 1600, 400
     w, h = W * SS, H * SS
     img = background(w, h)
-    names = [SUITE["name"]] + [a["name"] for a in APPS]
-    size, gap = 84 * SS, 26 * SS
-    x = (w - (len(names) * size + (len(names) - 1) * gap)) // 2
-    for n in names:
-        img = paste_icon(img, n, x, 40 * SS, size)
-        x += size + gap
     d = ImageDraw.Draw(img)
-    centered(d, "Suite LIVE", 150 * SS, font("segoeuib.ttf", 72), TEXT, w)
-    centered(d, "LiveCue  ·  LiveDeck  ·  LiveCount  ·  LiveCaption", 248 * SS, font("seguisb.ttf", 28), GREEN, w)
-    centered(d, "App gratuite per Windows per chi lavora negli eventi dal vivo", 296 * SS,
-             font("segoeui.ttf", 24), DIM, w)
+    centered(d, "Suite LIVE", 112 * SS, font("segoeuib.ttf", 80), TEXT, w)
+    centered(d, "LiveCue  ·  LiveDeck  ·  LiveCount  ·  LiveCaption", 222 * SS, font("seguisb.ttf", 30), GREEN, w)
+    centered(d, "App gratuite per Windows per chi lavora negli eventi dal vivo", 272 * SS,
+             font("segoeui.ttf", 25), DIM, w)
     save(img, IMG / "banner-home.png", W, H)
 
 
@@ -205,7 +199,8 @@ html,body{background:transparent;color:var(--text);font-family:"Segoe UI",system
 body{padding:8px}
 a{color:inherit}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;gap:18px;align-items:flex-start}
-.card img.icon{width:72px;height:72px;border-radius:16px;flex:none}
+.icon,.ic{display:block;flex:none;background-size:cover}
+.card .icon{width:72px;height:72px;border-radius:16px;flex:none}
 .card h3{font-size:22px;font-weight:700;margin-bottom:4px}
 .card p{color:var(--dim);font-size:15px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--go);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 18px;border-radius:10px;transition:background .15s}
@@ -216,6 +211,11 @@ a{color:inherit}
 .small{font-size:13px;color:var(--dim)}
 .badge{height:20px;vertical-align:middle}
 """
+
+
+def icon_css(names):
+    # Each icon is embedded once, as a CSS class shared by the desktop and phone versions.
+    return "".join(f".i-{n}{{background-image:url({icon_uri(n)})}}\n" for n in names)
 
 
 def page(title, body, extra_css=""):
@@ -241,6 +241,28 @@ def badge(name):
             f'?label=versione&amp;color=22A046&amp;style=flat-square" alt="">')
 
 
+def compact(design_h, below_h):
+    """CSS for the phone version of a block.
+
+    On phones Google Sites keeps the embed's aspect ratio: a block 950x240 on the computer
+    becomes 360x90 on the phone, so a layout that stacks vertically would be cut off. The
+    compact version (class "m", the desktop one is "d") is drawn on a 360 x design_h grid
+    where 1rem = 10 design px, and the root font size scales it to fill the iframe exactly,
+    whatever its size. It kicks in when the iframe is narrow, or shorter than the desktop
+    layout needs (below_h)."""
+    return f"""
+.m{{display:none}}
+@media (max-width:700px),(max-height:{below_h}px){{
+html{{font-size:min(calc(100vw / 36),calc(100vh * 10 / {design_h}),16px)}}
+body{{padding:0;height:100vh;overflow:hidden}}
+.d{{display:none}}
+.m{{display:flex;flex-direction:column;justify-content:center;height:100vh;padding:.4rem;gap:.5rem}}
+}}
+.m a{{text-decoration:none}}
+.m .go{{background:var(--go);color:#fff;font-weight:600;border-radius:.8rem;white-space:nowrap}}
+"""
+
+
 def write(name, html):
     EMBED.mkdir(parents=True, exist_ok=True)
     (EMBED / name).write_text(html, encoding="utf-8")
@@ -252,7 +274,7 @@ def embed_cards():
     cards = []
     for a in APPS:
         cards.append(f"""<div class="card">
-  <img class="icon" src="{icon_uri(a['name'])}" alt="">
+  <span class="icon i-{a['name']}"></span>
   <div>
     <h3>{a['name']}</h3>
     <p>{a['tagline']}</p>
@@ -263,8 +285,17 @@ def embed_cards():
   </div>
 </div>""")
     s = SUITE
-    body = f"""<div class="suite card">
-  <img class="icon" src="{icon_uri(s['name'])}" alt="">
+    rows = "\n".join(
+        f'<a class="row{" hl" if a is SUITE else ""}" href="{download_url(a["name"], a["download"])}">'
+        f'<span class="ic i-{a["name"]}"></span><span class="nm">{a["name"]}</span>'
+        f'<span class="go">⬇ Scarica</span></a>'
+        for a in [SUITE] + APPS)
+    body = f"""<div class="m">
+{rows}
+</div>
+<div class="d">
+<div class="suite card">
+  <span class="icon i-{s['name']}"></span>
   <div>
     <h3>{s['name']} <span class="pill">consigliato</span></h3>
     <p>{s['tagline']} Mostra la versione installata e l'ultima pubblicata, e aggiorna con un clic.</p>
@@ -276,15 +307,20 @@ def embed_cards():
 </div>
 <div class="grid">
 {chr(10).join(cards)}
+</div>
 </div>"""
     css = """
 .suite{border-color:#2f5c3c;background:linear-gradient(135deg,#1d2a22,#1F2228 60%);margin-bottom:14px}
 .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#16181C;background:var(--amber);border-radius:999px;padding:2px 8px;vertical-align:middle;margin-left:6px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:680px){.grid{grid-template-columns:1fr}}
-@media (max-width:420px){.card{flex-direction:column;padding:16px}.card img.icon{width:60px;height:60px}}
-"""
-    write("schede-app.html", page("Le app della suite LIVE", body, css))
+.row{display:flex;align-items:center;gap:1rem;height:3.8rem;padding:0 .8rem 0 1rem;background:var(--card);border:1px solid var(--line);border-radius:1rem;color:var(--text)}
+.row.hl{border-color:#2f5c3c;background:#1d2a22}
+.row .ic{width:2.6rem;height:2.6rem;border-radius:.6rem}
+.row .nm{flex:1;font-weight:700;font-size:1.5rem}
+.row .go{font-size:1.3rem;padding:.5rem 1.2rem}
+""" + compact(230, 500)
+    write("schede-app.html", page("Le app della suite LIVE", body, css + icon_css([SUITE["name"]] + [a["name"] for a in APPS])))
 
 
 def embed_download(app):
@@ -294,8 +330,19 @@ def embed_download(app):
         asset, desc = app["alt"]
         alt = (f'<a class="btn ghost" href="{download_url(app["name"], asset)}">{asset}</a>'
                f'<span class="small">{desc}</span>')
-    body = f"""<div class="card dl">
-  <img class="icon" src="{icon_uri(app['name'])}" alt="">
+    alt_m = ""
+    if app.get("alt"):
+        alt_m = (f'<a class="alt" href="{download_url(app["name"], app["alt"][0])}">'
+                 f'oppure la versione portatile: {app["alt"][0]}</a>')
+    body = f"""<div class="m">
+  <div class="one">
+    <span class="ic i-{app['name']}"></span><span class="nm">{app['name']}</span>
+    <a class="go" href="{download_url(app['name'], app['download'])}">⬇ Scarica</a>
+  </div>
+  {alt_m}
+</div>
+<div class="card dl d">
+  <span class="icon i-{app['name']}"></span>
   <div class="txt">
     <h3>Scarica {app['name']} {badge(app['name'])}</h3>
     <p>{app['note']}. Il pulsante scarica sempre l'ultima versione.</p>
@@ -311,9 +358,13 @@ def embed_download(app):
 .dl{align-items:center}
 .btn.big{font-size:17px;padding:13px 22px}
 .more{margin-top:12px}
-@media (max-width:480px){.dl{flex-direction:column;align-items:flex-start}.btn.big{width:100%}}
-"""
-    write(f"scarica-{app['page']}.html", page(f"Scarica {app['name']}", body, css))
+.one{display:flex;align-items:center;gap:1.2rem;background:var(--card);border:1px solid var(--line);border-radius:1.2rem;padding:.8rem 1rem}
+.one .ic{width:4rem;height:4rem;border-radius:.9rem}
+.one .nm{flex:1;font-weight:700;font-size:1.8rem}
+.one .go{font-size:1.5rem;padding:.9rem 1.6rem}
+.alt{font-size:1.25rem;color:var(--dim);text-align:center;text-decoration:underline!important}
+""" + (compact(100, 215) if app.get("alt") else compact(76, 170))
+    write(f"scarica-{app['page']}.html", page(f"Scarica {app['name']}", body, css + icon_css([app["name"]])))
 
 
 def embed_coffee():
@@ -322,7 +373,8 @@ def embed_coffee():
     buf = io.BytesIO()
     im.point(lambda v: 255 if v > 128 else 0).convert("1").save(buf, "PNG", optimize=True)
     qr = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
-    body = f"""<div class="card coffee">
+    body = f"""<div class="m"><a class="go bmcm" href="{BMC}">☕ Offrimi un caffè</a></div>
+<div class="card coffee d">
   <img class="qr" src="{qr}" alt="QR code buymeacoffee.com/cin8">
   <div>
     <h3>☕ Offrimi un caffè</h3>
@@ -338,8 +390,8 @@ def embed_coffee():
 .qr{width:120px;height:120px;border-radius:12px;background:#fff;padding:6px;flex:none}
 .btn.bmc{background:#FFDD00;color:#0D0C22}
 .btn.bmc:hover{background:#ffe633}
-@media (max-width:480px){.coffee{flex-direction:column;align-items:flex-start}}
-"""
+.bmcm{display:flex;align-items:center;justify-content:center;height:4.4rem;font-size:1.7rem;background:#FFDD00!important;color:#0D0C22!important}
+""" + compact(60, 160)
     write("caffe.html", page("Offrimi un caffè", body, css))
 
 
