@@ -1,8 +1,8 @@
 # LiveSuite — note per Claude
 
-Launcher della suite LIVE (LiveCue, LiveSlides, LiveCount, LiveCaption): mostra versione installata e ultima versione su GitHub di ogni app, scarica ed esegue l'installer, si aggiorna da solo. L'utente parla **italiano**: rispondi in italiano.
+Launcher della suite LIVE (LiveCue, LiveDeck, LiveCount, LiveCaption): mostra versione installata e ultima versione su GitHub di ogni app, scarica ed esegue l'installer, si aggiorna da solo. L'utente parla **italiano**: rispondi in italiano.
 
-Repository: https://github.com/ncrdavide-svg/LiveSuite (pubblico). Le app: `ncrdavide-svg/LiveCue`, `/LiveSlides`, `/LiveCount`, `/LiveCaption` (quest'ultima in Python + PyInstaller, sempre con installer Inno Setup).
+Repository: https://github.com/ncrdavide-svg/LiveSuite (pubblico). Le app: `ncrdavide-svg/LiveCue`, `/LiveDeck` (fino alla 1.3 `LiveSlides`: `SuiteApp.LegacyExeNames` riconosce le vecchie installazioni), `/LiveCount`, `/LiveCaption` (quest'ultima in Python + PyInstaller, sempre con installer Inno Setup).
 
 ## Comandi
 
@@ -19,7 +19,7 @@ gh release create vX.Y.Z artifacts\LiveSuite.exe --title "LiveSuite X.Y.Z" --not
 - `GitHub.cs`: API pubblica `releases/latest` (limite 60 richieste/ora per IP) + download con progresso. Se l'API non risponde, il download usa `releases/latest/download/<App>-Setup.exe`, quindi **ogni Release delle app deve avere l'asset col nome fisso `<App>-Setup.exe`**.
 - `Installed.cs`: versione installata da `HKCU/HKLM\...\Uninstall\{AppId}_is1` (`DisplayVersion`, `InstallLocation`), viste 64 e 32 bit. Se l'exe non c'è più, l'app conta come non installata.
 - `SelfUpdate.cs`: se la Release di LiveSuite ha `LiveSuite.exe` più nuovo, rinomina l'exe in esecuzione in `.old`, copia il nuovo, riavvia; `.old` si cancella all'avvio successivo. Se la cartella non è scrivibile apre la pagina della Release.
-- `SupportWindow`: finestra Buy Me a Coffee (QR + buymeacoffee.com/cin8, "No, grazie" dopo 3 s) a ogni avvio, modale, identica a quella di LiveCue, LiveSlides e LiveCount; nel piè di pagina anche il link «Offrimi un caffè».
+- `SupportWindow`: finestra Buy Me a Coffee (QR + buymeacoffee.com/cin8, "No, grazie" dopo 3 s) a ogni avvio, modale, identica a quella di LiveCue, LiveDeck, LiveCount e LiveCaption; nel piè di pagina anche il link «Offrimi un caffè».
 
 ## Convenzioni (come le altre app)
 
