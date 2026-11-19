@@ -97,9 +97,9 @@ Per ogni pagina apri il file corrispondente in `pagine/` e segui le sezioni nell
 
 In alto c'è l'icona **Anteprima** (lo schermo con l'occhio). In basso a destra dell'anteprima scegli **telefono** e **tablet**.
 
-I blocchi HTML si adattano alla larghezza: su telefono le schede vanno una sotto l'altra e diventano più alte. Se nella Home la griglia delle app mostra una barra di scorrimento interna su telefono, hai due possibilità:
-- allunga il riquadro (su computer resta un po' di spazio vuoto sotto, non è un problema);
-- oppure al posto di `schede-app.html` usa nella Home i singoli `scarica-<app>.html`, uno per app, in un layout a due colonne: sono più bassi e su telefono si impilano da soli.
+Su telefono Google Sites **mantiene le proporzioni** dei blocchi incorporati: un blocco largo 950 e alto 240 sul computer diventa 360×90 sul telefono. Per questo ogni blocco ha una **versione compatta** che si attiva da sola quando il riquadro è stretto (o più basso di quanto serve alla versione completa) e riempie esattamente lo spazio, senza barre di scorrimento: righe con icona, nome e pulsante «Scarica»; per il caffè solo il pulsante giallo.
+
+Se su computer vedi la versione compatta al posto di quella completa, il riquadro è troppo basso: allungalo un po'.
 
 ## 7. Pubblica
 
