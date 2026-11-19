@@ -13,6 +13,9 @@ namespace LiveSuite
         /// <summary>Inno Setup AppId (without the doubled brace), used to find the installed version.</summary>
         public string InnoAppId { get; set; }
 
+        /// <summary>Exe names the app had before a rename, still found in old installs.</summary>
+        public string[] LegacyExeNames { get; set; } = new string[0];
+
         public string ExeName => Name + ".exe";
         public string SetupAssetName => Name + "-Setup.exe";
     }
@@ -38,10 +41,13 @@ namespace LiveSuite
             },
             new SuiteApp
             {
-                Name = "LiveSlides",
+                Name = "LiveDeck",
                 Tagline = "PowerPoint e PDF in sequenza come un'unica presentazione, senza schermate nere.",
-                IconFile = "LiveSlides.png",
-                Repo = Owner + "/LiveSlides",
+                IconFile = "LiveDeck.png",
+                Repo = Owner + "/LiveDeck",
+                // Called LiveSlides up to 1.3 (same AppId): an old install still counts as installed,
+                // so the card offers the update instead of a fresh install.
+                LegacyExeNames = new[] { "LiveSlides.exe" },
                 InnoAppId = "{2535BD68-0D2F-4EC7-8B40-B7CD44F43CDC}",
             },
             new SuiteApp

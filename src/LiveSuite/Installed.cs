@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using Microsoft.Win32;
 
 namespace LiveSuite
@@ -26,9 +27,12 @@ namespace LiveSuite
                     {
                         if (key == null) continue;
                         var dir = key.GetValue("InstallLocation") as string;
-                        var exe = string.IsNullOrEmpty(dir) ? null : Path.Combine(dir, app.ExeName);
+                        if (string.IsNullOrEmpty(dir)) continue;
                         // An entry whose program is gone (deleted by hand) doesn't count as installed.
-                        if (exe == null || !File.Exists(exe)) continue;
+                        var exe = new[] { app.ExeName }.Concat(app.LegacyExeNames)
+                            .Select(name => Path.Combine(dir, name))
+                            .FirstOrDefault(File.Exists);
+                        if (exe == null) continue;
                         return new InstalledInfo { Version = key.GetValue("DisplayVersion") as string, ExePath = exe };
                     }
                 }

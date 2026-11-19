@@ -2,7 +2,7 @@
 
 <h1 align="center">LiveSuite</h1>
 
-<p align="center">Il punto di partenza della suite LIVE: un'unica piccola app per <b>installare e tenere aggiornate</b><br><a href="https://github.com/ncrdavide-svg/LiveCue">LiveCue</a>, <a href="https://github.com/ncrdavide-svg/LiveSlides">LiveSlides</a>, <a href="https://github.com/ncrdavide-svg/LiveCount">LiveCount</a> e <a href="https://github.com/ncrdavide-svg/LiveCaption">LiveCaption</a>.</p>
+<p align="center">Il punto di partenza della suite LIVE: un'unica piccola app per <b>installare e tenere aggiornate</b><br><a href="https://github.com/ncrdavide-svg/LiveCue">LiveCue</a>, <a href="https://github.com/ncrdavide-svg/LiveDeck">LiveDeck</a>, <a href="https://github.com/ncrdavide-svg/LiveCount">LiveCount</a> e <a href="https://github.com/ncrdavide-svg/LiveCaption">LiveCaption</a>.</p>
 
 <p align="center">
   <a href="https://github.com/ncrdavide-svg/LiveSuite/releases/latest/download/LiveSuite.exe"><b>⬇ Scarica LiveSuite.exe</b></a> — Windows 10/11, circa 200 KB, nessuna installazione

@@ -7,7 +7,7 @@ using System.Windows.Threading;
 namespace LiveSuite
 {
     /// <summary>
-    /// The same "support the app" window as LiveCue, LiveSlides and LiveCount, shown once per launch
+    /// The same "support the app" window as LiveCue, LiveDeck, LiveCount and LiveCaption, shown once per launch
     /// (see MainWindow's Loaded handler): a Buy Me a Coffee QR code/link in BMC's own brand colors.
     /// "No, grazie" stays disabled for a few seconds, long enough to actually notice the QR code.
     /// </summary>
