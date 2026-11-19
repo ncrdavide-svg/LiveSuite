@@ -15,7 +15,7 @@
     <StackPanel Margin="24" HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="Ti piace la suite LIVE?" FontSize="18" FontWeight="Bold" Foreground="#0D0C22"
                    HorizontalAlignment="Center" TextAlignment="Center"/>
-        <TextBlock Text="Se LiveCue, LiveSlides e LiveCount ti sono utili, offrimi un caff&#232;" FontSize="13" Foreground="#0D0C22" TextWrapping="Wrap"
+        <TextBlock Text="Se le app della suite LIVE ti sono utili, offrimi un caff&#232;" FontSize="13" Foreground="#0D0C22" TextWrapping="Wrap"
                    HorizontalAlignment="Center" TextAlignment="Center" Margin="0,4,0,16"/>
 
         <Border Background="White" CornerRadius="8" Padding="10" HorizontalAlignment="Center">

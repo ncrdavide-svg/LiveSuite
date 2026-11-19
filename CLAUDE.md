@@ -1,8 +1,8 @@
 # LiveSuite — note per Claude
 
-Launcher della suite LIVE (LiveCue, LiveSlides, LiveCount): mostra versione installata e ultima versione su GitHub di ogni app, scarica ed esegue l'installer, si aggiorna da solo. L'utente parla **italiano**: rispondi in italiano.
+Launcher della suite LIVE (LiveCue, LiveSlides, LiveCount, LiveCaption): mostra versione installata e ultima versione su GitHub di ogni app, scarica ed esegue l'installer, si aggiorna da solo. L'utente parla **italiano**: rispondi in italiano.
 
-Repository: https://github.com/ncrdavide-svg/LiveSuite (pubblico). Le app: `ncrdavide-svg/LiveCue`, `/LiveSlides`, `/LiveCount`.
+Repository: https://github.com/ncrdavide-svg/LiveSuite (pubblico). Le app: `ncrdavide-svg/LiveCue`, `/LiveSlides`, `/LiveCount`, `/LiveCaption` (quest'ultima in Python + PyInstaller, sempre con installer Inno Setup).
 
 ## Comandi
 
