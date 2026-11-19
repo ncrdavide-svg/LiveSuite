@@ -52,6 +52,14 @@ namespace LiveSuite
                 Repo = Owner + "/LiveCount",
                 InnoAppId = "{766B9C0E-13AB-4EC5-81CF-A64E3E3C3441}",
             },
+            new SuiteApp
+            {
+                Name = "LiveCaption",
+                Tagline = "Sottotitoli dal vivo sul secondo schermo: trascrizione, un colore per relatore e traduzione in inglese.",
+                IconFile = "LiveCaption.png",
+                Repo = Owner + "/LiveCaption",
+                InnoAppId = "{BB4CDF44-BF66-4723-A67E-C48D9F7D34C6}",
+            },
         };
     }
 }
