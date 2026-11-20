@@ -16,6 +16,10 @@ namespace LiveSuite
         /// <summary>Exe names the app had before a rename, still found in old installs.</summary>
         public string[] LegacyExeNames { get; set; } = new string[0];
 
+        /// <summary>Not released to the public yet: the card says so and offers no download.
+        /// A copy already on this PC (e.g. a tester's) can still be opened.</summary>
+        public bool ComingSoon { get; set; }
+
         public string ExeName => Name + ".exe";
         public string SetupAssetName => Name + "-Setup.exe";
     }
@@ -48,6 +52,8 @@ namespace LiveSuite
                 // Called LiveSlides up to 1.3 (same AppId): an old install still counts as installed,
                 // so the card offers the update instead of a fresh install.
                 LegacyExeNames = new[] { "LiveSlides.exe" },
+                // Still being worked on before it goes public.
+                ComingSoon = true,
                 InnoAppId = "{2535BD68-0D2F-4EC7-8B40-B7CD44F43CDC}",
             },
             new SuiteApp
