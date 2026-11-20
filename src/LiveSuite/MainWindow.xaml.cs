@@ -15,13 +15,16 @@ namespace LiveSuite
         {
             InitializeComponent();
             AppList.ItemsSource = _items;
-            FooterText.Text = $"LiveSuite {Versions.Short(Versions.Current)} · le installazioni arrivano dalle Releases su GitHub";
+            var supporter = SupporterCode.FindSupporter();
+            FooterText.Text = $"LiveSuite {Versions.Short(Versions.Current)} · le installazioni arrivano dalle Releases su GitHub"
+                              + (supporter != null ? $" · grazie, {supporter}!" : "");
             Loaded += async (_, __) =>
             {
                 // GitHub is checked while the support window is up, so the cards are ready when it closes.
                 var refresh = RefreshAllAsync();
                 // Modal on purpose, as in the other apps: a non-modal one ended up hidden behind this window.
-                new SupportWindow { Owner = this }.ShowDialog();
+                // Supporters (valid sostenitore.txt) don't get it at all.
+                if (supporter == null) new SupportWindow { Owner = this }.ShowDialog();
                 await refresh;
             };
             // Coming back to the window (e.g. after closing an app or an installer) re-reads what's installed.
