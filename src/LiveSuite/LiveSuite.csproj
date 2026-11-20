@@ -11,7 +11,7 @@
     <AssemblyName>LiveSuite</AssemblyName>
     <RootNamespace>LiveSuite</RootNamespace>
     <ApplicationIcon>Assets\LiveSuite.ico</ApplicationIcon>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <Product>LiveSuite</Product>
     <Description>Scarica e aggiorna le app della suite LIVE</Description>
     <Copyright>LiveSuite</Copyright>
