@@ -44,6 +44,8 @@ namespace LiveSuite
 
         void NoThanksButton_Click(object sender, RoutedEventArgs e) => Close();
 
+        void CodeLink_Click(object sender, RoutedEventArgs e) { if (SupporterCodeDialog.Ask(this)) Close(); }
+
         void Link_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             try { Process.Start(new ProcessStartInfo(SupportUrl) { UseShellExecute = true }); }
