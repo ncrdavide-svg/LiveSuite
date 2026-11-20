@@ -70,10 +70,12 @@
 
                             <StackPanel Grid.Column="2" VerticalAlignment="Center" MinWidth="170">
                                 <Button x:Name="Primary" Style="{StaticResource Btn}" Content="{Binding PrimaryText}"
-                                        IsEnabled="{Binding CanPrimary}" Click="Primary_Click"/>
+                                        IsEnabled="{Binding CanPrimary}" Click="Primary_Click"
+                                        Visibility="{Binding ShowPrimary, Converter={StaticResource Vis}}"/>
                                 <Button Style="{StaticResource Btn}" Content="Apri la versione attuale" Margin="0,8,0,0" FontWeight="Normal"
                                         Visibility="{Binding ShowOpenSecondary, Converter={StaticResource Vis}}" Click="Open_Click"/>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0"
+                                            Visibility="{Binding ShowReleases, Converter={StaticResource Vis}}">
                                     <Button Style="{StaticResource LinkBtn}" Content="Novità" Click="Releases_Click"/>
                                     <TextBlock Text="  ·  " Foreground="{StaticResource Dim}" FontSize="13"
                                                Visibility="{Binding ShowReinstall, Converter={StaticResource Vis}}"/>
@@ -90,6 +92,10 @@
                         <DataTrigger Binding="{Binding State}" Value="UpToDate">
                             <Setter TargetName="Badge" Property="Background" Value="#2622A046"/>
                             <Setter TargetName="BadgeText" Property="Foreground" Value="#66DE80"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding State}" Value="ComingSoon">
+                            <Setter TargetName="Badge" Property="Background" Value="#33FFB300"/>
+                            <Setter TargetName="BadgeText" Property="Foreground" Value="{StaticResource Amber}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding State}" Value="UpdateAvailable">
                             <Setter TargetName="Badge" Property="Background" Value="#33FFB300"/>

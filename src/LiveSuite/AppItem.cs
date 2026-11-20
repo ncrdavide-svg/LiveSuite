@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace LiveSuite
 {
-    public enum AppState { Checking, NotInstalled, UpdateAvailable, UpToDate, Unknown }
+    public enum AppState { Checking, NotInstalled, UpdateAvailable, UpToDate, Unknown, ComingSoon }
 
     /// <summary>One card in the window: an app of the suite, what's installed and what's on GitHub.</summary>
     public sealed class AppItem : INotifyPropertyChanged
@@ -52,6 +52,7 @@ namespace LiveSuite
             get
             {
                 if (Checking) return AppState.Checking;
+                if (App.ComingSoon) return Installed == null ? AppState.ComingSoon : AppState.Unknown;
                 if (Installed == null) return AppState.NotInstalled;
                 if (LatestVersion == null || InstalledVersion == null) return AppState.Unknown;
                 return LatestVersion > InstalledVersion ? AppState.UpdateAvailable : AppState.UpToDate;
@@ -68,13 +69,14 @@ namespace LiveSuite
                     case AppState.NotInstalled: return "NON INSTALLATA";
                     case AppState.UpdateAvailable: return "AGGIORNAMENTO";
                     case AppState.UpToDate: return "AGGIORNATA";
+                    case AppState.ComingSoon: return "IN ARRIVO";
                     default: return "INSTALLATA";
                 }
             }
         }
 
         public string InstalledText => Installed == null
-            ? "Non installata su questo PC"
+            ? App.ComingSoon ? "Non ancora disponibile" : "Non installata su questo PC"
             : "Installata: " + (InstalledVersion != null ? Versions.Short(InstalledVersion) : Installed.Version ?? "versione sconosciuta");
 
         public string LatestText
@@ -82,6 +84,7 @@ namespace LiveSuite
             get
             {
                 if (Checking) return "Controllo dell'ultima versione…";
+                if (App.ComingSoon) return "In arrivo: ci stiamo ancora lavorando.";
                 if (Release == null) return "Ultima versione non disponibile" + (string.IsNullOrEmpty(Error) ? "" : " — " + Error);
                 var text = "Ultima versione: " + Versions.Short(LatestVersion);
                 if (DateTime.TryParse(Release.PublishedAt, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var date))
@@ -107,8 +110,11 @@ namespace LiveSuite
         /// <summary>Primary button downloads (green) rather than opens (neutral).</summary>
         public bool PrimaryIsDownload => State == AppState.NotInstalled || State == AppState.UpdateAvailable;
         public bool CanPrimary => !Busy && State != AppState.Checking;
+        public bool ShowPrimary => State != AppState.ComingSoon;
         public bool ShowOpenSecondary => !Busy && State == AppState.UpdateAvailable;
-        public bool ShowReinstall => !Busy && (State == AppState.UpToDate || State == AppState.Unknown);
+        public bool ShowReinstall => !Busy && !App.ComingSoon && (State == AppState.UpToDate || State == AppState.Unknown);
+        // A coming-soon app has no public release to show or to install.
+        public bool ShowReleases => !App.ComingSoon;
 
         public string ReleasesUrl => Release?.HtmlUrl ?? $"https://github.com/{App.Repo}/releases/latest";
 
@@ -117,6 +123,13 @@ namespace LiveSuite
             Checking = true;
             Error = null;
             Installed = await Task.Run(() => LiveSuite.Installed.Find(App));
+            if (App.ComingSoon)
+            {
+                // No GitHub call: it would only spend the 60 requests/hour of the public API.
+                Release = null;
+                Checking = false;
+                return;
+            }
             try
             {
                 Release = await GitHub.GetLatestReleaseAsync(App.Repo);
